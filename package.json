@@ -1,0 +1,34 @@
+{
+  "name": "practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "CHOKIDAR_USEPOLLING=true concurrently  \" npx swc src -s  --out-dir build -w '**/*.ts' \"  \"nodemon build/main.js \" ",
+    "start": "CHOKIDAR_USEPOLLING=true nodemon build/main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@swc/cli": "^0.1.55",
+    "@swc/core": "^1.2.151",
+    "@types/graphql-fields": "^1.3.4",
+    "chokidar": "^3.5.3",
+    "concurrently": "^7.0.0"
+  },
+  "dependencies": {
+    "apollo-server": "^3.6.3",
+    "apollo-server-core": "^3.6.3",
+    "apollo-server-fastify": "^3.6.3",
+    "apollo-server-plugin-base": "^3.5.1",
+    "argon2": "^0.28.5",
+    "dotenv": "^16.0.0",
+    "fastify": "^3.27.4",
+    "graphql": "^16.3.0",
+    "graphql-fields": "^2.0.3",
+    "mongoose": "^6.2.4"
+  }
+}
