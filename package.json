@@ -12,8 +12,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "cross-env CHOKIDAR_USEPOLLING=true concurrently  \" npx swc src -s  --out-dir build -w 'src/**/*.ts' \"  \"npx nodemon build/main.js \" \"vite \" ",
-    "start": "cross-env CHOKIDAR_USEPOLLING=true npx nodemon build/main.js"
+    "watch": "cross-env CHOKIDAR_USEPOLLING=true concurrently  \" npx swc src -s  --out-dir build -w 'src/**/*.ts' \"  \"nodemon build/main.js \" \"vite \" ",
+    "start": "cross-env CHOKIDAR_USEPOLLING=true nodemon build/main.js"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +27,7 @@
     "@vitejs/plugin-react": "^1.2.0",
     "chokidar": "^3.5.3",
     "concurrently": "^7.0.0",
+    "nodemon": "^2.0.15",
     "typescript": "^4.6.2",
     "vite": "^2.8.6"
   },
