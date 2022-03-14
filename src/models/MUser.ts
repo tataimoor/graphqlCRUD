@@ -4,11 +4,13 @@ import { emailRegex } from "../validator/basic.js";
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
+    required:true
   },
   email: {
     type: String,
     validate: [emailRegex],
-    unique:true
+    unique:true,
+    required:true
   },
   password:{
       type:String,

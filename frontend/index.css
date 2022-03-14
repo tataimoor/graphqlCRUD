@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family:'Times New Roman', Times, serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -27,6 +27,7 @@ code {
 .btn:active {
   box-shadow: none;
   transition: 0.1s all;
+  color: gray;
 }
 
 .App{
@@ -34,6 +35,10 @@ code {
   margin-right: 2rem;
 }
 
-.container{
-  
+input[type="text"],input[type="number"]{
+  width: fit-content;
+  padding: 0.3rem;
+  margin: 0 0.4rem;
+  width: 100%;
+  border-radius: 6px;
 }

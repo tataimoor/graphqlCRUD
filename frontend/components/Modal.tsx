@@ -4,10 +4,10 @@ import { CloseIcon } from "../icons/CloseIcon";
 import { IModalProps } from "../types/Modal";
 export const Modal = (data: IModalProps) => {
   const close = (e: SyntheticEvent) => {
-     if(e.target == e.currentTarget){
-         e.stopPropagation()
-         data.onClose?.()
-     }
+    if (data.closeOnBGClick && e.target == e.currentTarget) {
+      e.stopPropagation();
+      data.onClose?.();
+    }
   };
   return (
     <>

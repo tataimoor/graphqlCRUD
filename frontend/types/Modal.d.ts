@@ -4,6 +4,7 @@ export type IModalProps = IModalType1 | IModalType2;
 
 interface IModalDefault {
   title?: string;
+  closeOnBGClick?:boolean
   onClose?: () => void;
   state?: boolean;
 }

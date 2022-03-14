@@ -1,6 +1,10 @@
+import { ObjectId } from "mongoose";
 import { MUser } from "./../models/MUser.js";
 import graphqlFields from "graphql-fields";
 import { IUser } from "../types/IUsers.js";
+import pkg from "mongoose";
+const { mongo } = pkg;
+
 /**
  * get Userss
  * @param _
@@ -15,18 +19,18 @@ export const getUsers = async (_: any, data: any, body: any, select: any) => {
   let skip = select.variableValues?.skip ?? 0;
 
   const fieldList = graphqlFields(select);
-  const keys = Object.keys(fieldList.docs);
-
-  promises.push(
-    MUser.find({}, keys.join(" "), { limit: take, skip }).lean().exec()
-  );
+  const keys = Object.keys(fieldList.docs ?? {});
+  if (keys.length)
+    promises.push(
+      MUser.find({}, keys.join(" "), { limit: take, skip }).lean().exec()
+    );
 
   if (fieldList.count) {
     promises.push(MUser.countDocuments().lean().exec());
   }
 
   const [user, count] = await Promise.all(promises);
-  return { docs: user, count };
+  return { docs: user, count: count ? count : user };
 };
 
 /**
@@ -37,36 +41,20 @@ export const getUsers = async (_: any, data: any, body: any, select: any) => {
  * @param select
  * @returns
  */
-export const addUser = async (
+export const upsertUser = async (
   _: any,
   data: { input: IUser },
   body: any,
   select: any
 ) => {
-  return await MUser.create(data.input);
-};
-/**
- * @description Updates User
- * @param _
- * @param data
- * @param body
- * @param select
- * @returns
- */
-
-export const updateUser = async (
-  _: any,
-  data: { input: IUser },
-  body: any,
-  select: any
-) => {
-  const fieldList = graphqlFields(select);
-  const keys = Object.keys(fieldList);
-
+  const userData = data.input;
+  const _id: any = data.input._id ?? new mongo.ObjectId();
+  delete userData._id;
+  console.log(userData, _id);
   const user = await MUser.findOneAndUpdate(
-    { _id: data.input._id },
-    { $set: data.input },
-    { projection: keys.join(" "), new: true }
+    { _id: _id },
+    { $set: userData },
+    { upsert: true, new: true }
   );
   return user;
 };
@@ -106,4 +94,3 @@ export const getUser = async (_: any, data: any, body: any, select: any) => {
   const user = await MUser.findById(id, keys.join(" "));
   return user;
 };
-
