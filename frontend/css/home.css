@@ -1,0 +1,47 @@
+h1{
+    color: gray;
+}
+.header{
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(216, 214, 214);
+    padding: 1rem;
+    align-items: center;
+}
+table{
+    width: 100%;
+    border-left: 1px solid rgb(224, 224, 224);
+}
+.column{
+    padding: 1rem;
+    border-bottom: 1px solid rgb(224, 224, 224);
+}
+.trash{
+    color: red;
+    padding: 0.4rem;
+    cursor: pointer;
+}
+
+.edit{
+    color: green;
+    padding: 0.4rem;
+    cursor: pointer;
+    
+}
+
+.form-group{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-start;
+}
+label{
+    width: calc(100% - 1rem);
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+}
+.title-input{
+    padding: 0.2rem;
+    width: 50px;
+}

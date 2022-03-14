@@ -106,3 +106,4 @@ export const getUser = async (_: any, data: any, body: any, select: any) => {
   const user = await MUser.findById(id, keys.join(" "));
   return user;
 };
+

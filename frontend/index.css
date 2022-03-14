@@ -1,0 +1,39 @@
+body {
+  margin: 0;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.btn{
+  border: 2px rgba(128, 128, 128, 0.144) solid;
+  border-radius: 10px;
+  box-shadow: 1px 2px 3px gray;
+  padding: 0.5rem;
+  font-size: large;
+  cursor: pointer;
+  transition: 1s all;
+
+}
+.btn:focus {
+  box-shadow: 2px 4px 3px gray;
+}
+
+
+.btn:active {
+  box-shadow: none;
+  transition: 0.1s all;
+}
+
+.App{
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.container{
+  
+}
