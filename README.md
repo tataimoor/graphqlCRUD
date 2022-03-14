@@ -1,0 +1,2 @@
+# graphqlCRUD
+basic crud graphql
