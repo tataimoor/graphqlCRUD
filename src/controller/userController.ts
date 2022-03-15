@@ -50,7 +50,6 @@ export const upsertUser = async (
   const userData = data.input;
   const _id: any = data.input._id ?? new mongo.ObjectId();
   delete userData._id;
-  console.log(userData, _id);
   const user = await MUser.findOneAndUpdate(
     { _id: _id },
     { $set: userData },

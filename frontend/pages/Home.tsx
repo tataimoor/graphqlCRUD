@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { IUser } from "../../src/types/IUsers";
 import { ADD_USER, DELETE_USER, GET_USERS } from "../apollo/gql/User";
 import { Modal } from "../components/Modal";
+import { Paginate } from "../components/Paginate";
 import "../css/home.css";
 import { EditIcon } from "../icons/EditIcon";
 import { TrashIcon } from "../icons/TrashIcon";
@@ -14,13 +15,24 @@ export const Home = () => {
   const [email, setEmail] = useState("");
   const [type, setType] = useState(1);
   const [id, setId] = useState<string | undefined>(undefined);
+  const [limit, setLimit] = useState(10);
+  const [skip, setSkip] = useState(0);
+  const [userList, setUserList] = useState<IUser[]>([]);
+  const [count, setCount] = useState(0);
 
   // queries
-  const userList = useQuery<{
+  const userGraph = useQuery<{
     users: { docs: IUser[]; count: number };
   }>(GET_USERS, {
-    variables: { take: 10, skip: 0 },
+    variables: { take: limit, skip: skip },
   });
+  useEffect(() => {
+    if (userGraph.data) {
+      setUserList(userGraph.data.users.docs);
+      setCount(userGraph.data.users.count);
+    }
+  }, [userGraph.data]);
+
   //mutations
   const [addUser] = useMutation(ADD_USER, {
     variables: {
@@ -43,7 +55,7 @@ export const Home = () => {
       setType(1);
       setId(undefined);
     } else if (id) {
-      const user = userList.data?.users.docs.find((item) => item._id == id)!;
+      const user = userGraph.data?.users.docs.find((item) => item._id == id)!;
       setName(user.name);
       setEmail(user.email);
       setType(user.type);
@@ -56,7 +68,7 @@ export const Home = () => {
       await addUser();
       setModal(false);
       Swal.fire("User Created!", undefined, "success");
-      userList.refetch();
+      userGraph.refetch();
     } catch (error) {
       Swal.fire("User Creation Failed!", undefined, "error");
     }
@@ -72,14 +84,13 @@ export const Home = () => {
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
-      await deleteUser({
-        variables: {
-          input: id,
-        },
-      });
-      userList.refetch();
-
       if (result.isConfirmed) {
+        await deleteUser({
+          variables: {
+            input: id,
+          },
+        });
+        userGraph.refetch();
         Swal.fire("Deleted!", "User has been deleted.", "success");
       }
     });
@@ -89,7 +100,7 @@ export const Home = () => {
     <>
       <h1>Home page</h1>
       <div className="header">
-        <b> Users ( {userList.data?.users.count} )</b>
+        <b> Users ( {count} )</b>
         <button onClick={() => setModal(!modal)} className="btn">
           Add User
         </button>
@@ -106,40 +117,47 @@ export const Home = () => {
             </tr>
           </thead>
           <tbody>
-            {userList.loading ? (
-              <tr>
-                <td>loading...</td>
+            {userList.map((item) => (
+              <tr key={item._id}>
+                <td className="column">{item._id}</td>
+                <td className="column">{item.name}</td>
+                <td className="column">{item.email}</td>
+                <td className="column">{item.type}</td>
+                <td className="column">
+                  <span
+                    onClick={() => deleteUserData(item._id!)}
+                    className="trash"
+                  >
+                    <TrashIcon />
+                  </span>
+                  <span
+                    onClick={() => {
+                      setId(item._id), setModal(true);
+                    }}
+                    className="edit"
+                  >
+                    <EditIcon />
+                  </span>
+                </td>
               </tr>
-            ) : (
-              userList.data?.users.docs.map((item) => (
-                <tr key={item._id}>
-                  <td className="column">{item._id}</td>
-                  <td className="column">{item.name}</td>
-                  <td className="column">{item.email}</td>
-                  <td className="column">{item.type}</td>
-                  <td className="column">
-                    <span
-                      onClick={() => deleteUserData(item._id!)}
-                      className="trash"
-                    >
-                      <TrashIcon />
-                    </span>
-                    <span
-                      onClick={() => {
-                        setId(item._id), setModal(true);
-                      }}
-                      className="edit"
-                    >
-                      <EditIcon />
-                    </span>
-                  </td>
-                </tr>
-              ))
-            )}
+            ))}
           </tbody>
         </table>
+
+        <Paginate
+          limit={limit}
+          setData={userGraph.refetch}
+          total={count}
+          setLimit={setLimit}
+          setSkip={setSkip}
+          skip={skip}
+        ></Paginate>
       </div>
-      <Modal onClose={() => setModal(false)} state={modal}>
+      <Modal
+        title={id ? "Edit User" : "Add User"}
+        onClose={() => setModal(false)}
+        state={modal}
+      >
         <div className="form-group">
           <label>
             <span className="title-input"> Name: </span>
