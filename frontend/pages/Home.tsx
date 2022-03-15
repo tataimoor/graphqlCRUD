@@ -5,9 +5,11 @@ import { IUser } from "../../src/types/IUsers";
 import { ADD_USER, DELETE_USER, GET_USERS } from "../apollo/gql/User";
 import { Modal } from "../components/Modal";
 import { Paginate } from "../components/Paginate";
+import { Sortable } from "../components/Sortable";
 import "../css/home.css";
 import { EditIcon } from "../icons/EditIcon";
 import { TrashIcon } from "../icons/TrashIcon";
+import { SortType } from "../types/Sort";
 export const Home = () => {
   //state
   const [modal, setModal] = useState(false);
@@ -19,12 +21,13 @@ export const Home = () => {
   const [skip, setSkip] = useState(0);
   const [userList, setUserList] = useState<IUser[]>([]);
   const [count, setCount] = useState(0);
+  const [sort, setSort] = useState<SortType | undefined>(undefined);
 
   // queries
   const userGraph = useQuery<{
     users: { docs: IUser[]; count: number };
   }>(GET_USERS, {
-    variables: { take: limit, skip: skip },
+    variables: { take: limit, skip: skip, sort:sort?.name,order:sort?.order },
   });
   useEffect(() => {
     if (userGraph.data) {
@@ -110,9 +113,21 @@ export const Home = () => {
           <thead>
             <tr>
               <th className="column">id</th>
-              <th className="column">name</th>
-              <th className="column">email</th>
-              <th className="column">type</th>
+              <th className="column">
+                <Sortable setSort={setSort} state={sort} name="name">
+                  name
+                </Sortable>
+              </th>
+              <th className="column">
+                <Sortable setSort={setSort} state={sort} name="email">
+                  email
+                </Sortable>
+              </th>
+              <th className="column">
+                <Sortable setSort={setSort} state={sort} name="type">
+                  type
+                </Sortable>
+              </th>
               <th className="column">action</th>
             </tr>
           </thead>
@@ -160,7 +175,7 @@ export const Home = () => {
       >
         <div className="form-group">
           <label>
-            <span className="title-input"> Name: </span>
+            <span className="title-input">Name: </span>
             <input
               value={name}
               onInput={(e) => setName(e.currentTarget.value)}
