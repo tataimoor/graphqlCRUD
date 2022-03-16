@@ -12,7 +12,7 @@ export const client = new ApolloClient({
          fields:{
           users:{
             merge(existing, incoming, { mergeObjects }) {
-              return mergeObjects(existing, incoming);
+              return incoming;
             },
           }
          }

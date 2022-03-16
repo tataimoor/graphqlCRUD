@@ -48,7 +48,7 @@ export const Paginate = (props: IPaginateProps) => {
 
   useEffect(() => {
     props.setSkip((page - 1) * props.limit);
-  }, [page, props.limit]);
+  }, [page, props.limit,props.total]);
 
   // const getPage = async (page: number) => {
   //   setPage(page);
